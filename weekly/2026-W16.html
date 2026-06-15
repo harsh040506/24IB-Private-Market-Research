@@ -217,7 +217,29 @@ article{min-width:0}
 /* Media and long unbroken strings can never exceed their container */
 img,svg,canvas,video{max-width:100%;height:auto}
 .body-text,.lead-text,.article-title,.sec-h2,.chart-title,.chart-sub,
-.dc-name,.dc-investors,.week-banner-val,.stat-card-sub,.inv-name{overflow-wrap:anywhere}
+.dc-name,.dc-investors,.week-banner-val,.stat-card-sub{overflow-wrap:anywhere}
+.inv-name{overflow-wrap:break-word}
+
+/* ----- mobile spacing & rhythm refinements ----- */
+@media (max-width:1023px){
+  .article-grid{gap:1.75rem}        /* was 3rem — tighten TOC-to-content gap */
+  .toc{margin-bottom:0}             /* sticky bar already has a border + grid gap */
+  .chart-fig{margin:2.25rem 0}
+  .section-divider{margin:2.75rem 0}
+}
+@media (max-width:600px){
+  /* Fit all four columns to the viewport — text wraps, nothing clips or scrolls */
+  .investor-table{table-layout:fixed;width:100%}
+  .investor-table td,.investor-table th{padding:8px 6px;overflow-wrap:break-word}
+  .investor-table th{letter-spacing:.05em}
+  .investor-table th:nth-child(1),.investor-table td:nth-child(1){width:32%}
+  .investor-table th:nth-child(2),.investor-table td:nth-child(2){width:16%}
+  .investor-table th:nth-child(3),.investor-table td:nth-child(3){width:28%}
+  .investor-table th:nth-child(4),.investor-table td:nth-child(4){width:24%}
+  .investor-table .inv-dot{width:6px;height:6px}
+  .inv-dot-row{gap:3px;overflow:hidden}
+}
+
 
 @media (max-width:480px){
   .chart-fig{padding:1.4rem 1.1rem}
