@@ -198,12 +198,15 @@ body { background-color: #fdfbf7; color: #1a1a18; font-family: 'Manrope', system
 @media print{.site-nav,.rep-pager,.site-foot{display:none!important}}
 </style>
 <style>
-/* ===== responsive layout fixes (RH-v2) =====
-   Root cause of mobile horizontal overflow: grid/flex items default to
-   min-width:auto and refuse to shrink below their content's intrinsic width,
-   so wide tables/charts inflate the column past the viewport (and the inner
-   overflow-x:auto wrappers can never take effect). Letting these items shrink
-   to 0 lets the scroll containers actually contain their wide content. */
+/* ===== responsive layout system (RH-v3) =====
+   (1) nothing exceeds the viewport on any screen; (2) horizontal spacing is
+   fluid/viewport-driven (no hardcoded side padding) so the sticky section menu
+   always spans the full screen width; (3) icons are inline SVG that render on
+   every device. */
+
+/* Root-cause overflow fix: grid/flex items default to min-width:auto and refuse
+   to shrink below their content, letting wide tables/charts inflate the column
+   past the viewport. Allow them to shrink so inner scrollers take effect. */
 .article-grid{min-width:0}
 .article-grid > .toc,
 .article-grid > article{min-width:0;max-width:100%}
@@ -214,21 +217,46 @@ article{min-width:0}
 /* Wide tabular data scrolls within its own box — never widens the page */
 .pivot-table-wrapper,.table-wrapper{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
-/* Media and long unbroken strings can never exceed their container */
+/* Velocity-chart hover tooltips/labels are centred on each bar and would spill
+   past the right edge on the last bars (they occupy layout even at opacity:0),
+   which was widening the page. Clip them horizontally; vertical stays visible. */
+.chart-area{overflow-x:clip}
+
+/* Media + long strings can never exceed their container */
 img,svg,canvas,video{max-width:100%;height:auto}
 .body-text,.lead-text,.article-title,.sec-h2,.chart-title,.chart-sub,
 .dc-name,.dc-investors,.week-banner-val,.stat-card-sub{overflow-wrap:anywhere}
 .inv-name{overflow-wrap:break-word}
 
-/* ----- mobile spacing & rhythm refinements ----- */
+/* ----- fluid gutter: side spacing scales with the viewport (no fixed px) -----
+   page padding and the full-bleed section menu share one variable, so the menu
+   always reaches both screen edges at every size / resolution. */
+:root{--gutter:clamp(1.05rem, 5vw, 2rem)}
+.page-inner{padding-left:var(--gutter);padding-right:var(--gutter)}
+.site-nav-inner,.rep-pager,.site-foot .foot-inner{padding-left:var(--gutter);padding-right:var(--gutter)}
+
+/* ----- fluid component sizing: continuous with the viewport, not stepped ----- */
+.chart-fig{padding:clamp(1.15rem, 4.5vw, 2.5rem)}
+.h-bar-label{flex:0 0 clamp(68px, 22vw, 140px)}
+.h-bar-val{flex:0 0 clamp(46px, 14vw, 64px)}
+.h-bar-count{flex:0 0 clamp(34px, 11vw, 52px)}
+.bucket-label{flex:0 0 clamp(56px, 18vw, 110px)}
+.bucket-stats{flex:0 0 clamp(46px, 15vw, 90px)}
+.article-title{font-size:clamp(1.4rem, 6vw, 3.04rem)}
+.stat-card-value{font-size:clamp(1.3rem, 5vw, 1.6rem)}
+
+/* inline SVG icons — em-sized, inherit colour, render on every device */
+.ic{width:1em;height:1em;fill:currentColor;display:inline-block;vertical-align:-0.125em;flex:0 0 auto}
+
+/* ----- spacing & rhythm on tablet / phone ----- */
 @media (max-width:1023px){
-  .article-grid{gap:1.75rem}        /* was 3rem — tighten TOC-to-content gap */
-  .toc{margin-bottom:0}             /* sticky bar already has a border + grid gap */
+  .article-grid{gap:1.75rem}
+  .toc{margin:0 calc(-1*var(--gutter)) 0;padding:0 var(--gutter)}
   .chart-fig{margin:2.25rem 0}
   .section-divider{margin:2.75rem 0}
 }
 @media (max-width:600px){
-  /* Fit all four columns to the viewport — text wraps, nothing clips or scrolls */
+  /* Investor league table: fit all four columns — text wraps, never scrolls/clips */
   .investor-table{table-layout:fixed;width:100%}
   .investor-table td,.investor-table th{padding:8px 6px;overflow-wrap:break-word}
   .investor-table th{letter-spacing:.05em}
@@ -238,19 +266,8 @@ img,svg,canvas,video{max-width:100%;height:auto}
   .investor-table th:nth-child(4),.investor-table td:nth-child(4){width:24%}
   .investor-table .inv-dot{width:6px;height:6px}
   .inv-dot-row{gap:3px;overflow:hidden}
-}
-
-
-@media (max-width:480px){
-  .chart-fig{padding:1.4rem 1.1rem}
-  .stat-cards{grid-template-columns:1fr 1fr}
   .chart-legend{gap:1rem;flex-wrap:wrap}
   .legend-item{font-size:9px}
-  .h-bar-label{flex:0 0 76px;font-size:9px}
-  .h-bar-val{flex:0 0 46px;font-size:9px}
-  .h-bar-count{flex:0 0 34px}
-  .bucket-label{flex:0 0 64px;font-size:9px}
-  .bucket-stats{flex:0 0 52px;font-size:8px}
 }
 @media (max-width:420px){
   .site-nav .nav-links{gap:.1rem}
@@ -258,16 +275,8 @@ img,svg,canvas,video{max-width:100%;height:auto}
   .site-foot .foot-links{flex-wrap:wrap;gap:.85rem}
   .rep-pager .pg{padding:.85rem .9rem}
 }
-@media (max-width:360px){
-  .article-title{font-size:1.4rem}
-  .stat-card-value{font-size:1.3rem}
-  .chart-fig{padding:1.2rem .8rem}
-  .week-banner{padding:1.1rem 1rem}
-  .h-bar-label{flex:0 0 68px}
-  .bucket-label{flex:0 0 56px}
-  .bucket-stats{flex:0 0 46px}
-}
 </style>
+
 
 </head>
 <body>
@@ -595,9 +604,9 @@ window.addEventListener('scroll', () => {
 }, {passive:true});
 </script>
 <nav class="rep-pager">
-  <a class="pg prev" href="2025-W02.html"><span>&#8592; Previous</span><b>Week 2 &middot; 2025</b></a>
+  <a class="pg prev" href="2025-W02.html"><span><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M224 128a8 8 0 0 1-8 8H59.3l58.4 58.3a8 8 0 0 1-11.4 11.4l-72-72a8 8 0 0 1 0-11.4l72-72a8 8 0 0 1 11.4 11.4L59.3 120H216a8 8 0 0 1 8 8Z"/></svg> Previous</span><b>Week 2 &middot; 2025</b></a>
   <a class="pg index" href="index.html"><b>All Reports</b></a>
-  <a class="pg next" href="2025-W04.html"><span>Next &#8594;</span><b>Week 4 &middot; 2025</b></a>
+  <a class="pg next" href="2025-W04.html"><span>Next <svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M221.7 133.7l-72 72a8 8 0 0 1-11.4-11.4L196.7 136H40a8 8 0 0 1 0-16h156.7l-58.4-58.3a8 8 0 0 1 11.4-11.4l72 72a8 8 0 0 1 0 11.4Z"/></svg></span><b>Week 4 &middot; 2025</b></a>
 </nav><footer class="site-foot"><div class="foot-inner">
   <div>
     <div class="foot-brand">24<span>IB</span> Research</div>

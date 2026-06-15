@@ -77,6 +77,19 @@ a{color:inherit}
 <style>
 /* ===== responsive hardening — additive, narrow breakpoints only (RH-v1) ===== */
 img,svg,canvas,video{max-width:100%;height:auto}
+.ic{width:1em;height:1em;fill:currentColor;display:inline-block;vertical-align:-0.125em;flex:0 0 auto}
+:root{--gutter:clamp(1.05rem, 5vw, 2rem)}
+.site-nav-inner,.foot-inner,.wrap,.hero,.hero-rule,.section,.nf{padding-left:var(--gutter);padding-right:var(--gutter)}
+/* Archive card grid: let 2-col tracks shrink below content (min-width:auto fix),
+   and stack to one column on small phones where two stat columns can't fit. */
+@media (max-width:640px){
+  .card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+  .rep-card{min-width:0}
+  .rc-stats{gap:1rem}
+}
+@media (max-width:430px){
+  .card-grid{grid-template-columns:1fr}
+}
 @media (max-width:420px){
   .nav-links{gap:.1rem}
   .nav-links a{padding:.5rem .45rem;font-size:9px;letter-spacing:.05em}
@@ -97,7 +110,7 @@ img,svg,canvas,video{max-width:100%;height:auto}
   <div class="code">404</div>
   <h1>This briefing could not be located.</h1>
   <p>The report you are looking for may have moved, or the link may be incomplete. Return to the archive to find what you need.</p>
-  <a class="btn" href="/24IB-Private-Market-Research/index.html">&#8592; Back to Home</a>
+  <a class="btn" href="/24IB-Private-Market-Research/index.html"><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M224 128a8 8 0 0 1-8 8H59.3l58.4 58.3a8 8 0 0 1-11.4 11.4l-72-72a8 8 0 0 1 0-11.4l72-72a8 8 0 0 1 11.4 11.4L59.3 120H216a8 8 0 0 1 8 8Z"/></svg> Back to Home</a>
 </main>
 </body>
 </html>
