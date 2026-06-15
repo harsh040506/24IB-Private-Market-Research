@@ -197,6 +197,34 @@ body { background-color: #fdfbf7; color: #1a1a18; font-family: 'Manrope', system
 }
 @media print{.site-nav,.rep-pager,.site-foot{display:none!important}}
 </style>
+<style>
+/* ===== responsive hardening — additive, narrow breakpoints only (RH-v1) ===== */
+img,svg,canvas,video{max-width:100%;height:auto}
+.body-text,.lead-text,.article-title,.sec-h2,.chart-title{overflow-wrap:break-word}
+@media (max-width:480px){
+  .chart-fig{padding:1.4rem 1.1rem}
+  .stat-cards{grid-template-columns:1fr 1fr}
+  .chart-legend{gap:1.1rem;flex-wrap:wrap}
+  .legend-item{font-size:9px}
+  .h-bar-label{flex:0 0 84px;font-size:9px}
+  .h-bar-val{flex:0 0 50px}
+  .h-bar-count{flex:0 0 38px}
+  .bucket-label{flex:0 0 72px;font-size:9px}
+  .bucket-stats{flex:0 0 58px}
+}
+@media (max-width:420px){
+  .site-nav .nav-links{gap:.1rem}
+  .site-nav .nav-links a{padding:.5rem .45rem;font-size:9px;letter-spacing:.05em}
+  .site-foot .foot-links{flex-wrap:wrap;gap:.85rem}
+  .rep-pager .pg{padding:.85rem .9rem}
+}
+@media (max-width:360px){
+  .article-title{font-size:1.45rem}
+  .stat-card-value{font-size:1.35rem}
+  .chart-fig{padding:1.2rem .85rem}
+  .week-banner{padding:1.1rem 1.1rem}
+}
+</style>
 </head>
 <body>
 <nav class="site-nav"><div class="site-nav-inner">

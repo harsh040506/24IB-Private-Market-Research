@@ -74,6 +74,15 @@ a{color:inherit}
 .nf .btn{display:inline-flex;align-items:center;gap:.55rem;margin-top:2rem;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:.85rem 1.5rem;border-radius:7px;background:#0a2418;color:#fdfbf7;transition:transform .2s var(--ease)}
 .nf .btn:hover{transform:translateY(-2px)}
 </style>
+<style>
+/* ===== responsive hardening — additive, narrow breakpoints only (RH-v1) ===== */
+img,svg,canvas,video{max-width:100%;height:auto}
+@media (max-width:420px){
+  .nav-links{gap:.1rem}
+  .nav-links a{padding:.5rem .45rem;font-size:9px;letter-spacing:.05em}
+  .foot-links{flex-wrap:wrap;gap:.85rem}
+}
+</style>
 </head>
 <body>
 <nav class="site-nav"><div class="site-nav-inner">
