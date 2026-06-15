@@ -198,19 +198,37 @@ body { background-color: #fdfbf7; color: #1a1a18; font-family: 'Manrope', system
 @media print{.site-nav,.rep-pager,.site-foot{display:none!important}}
 </style>
 <style>
-/* ===== responsive hardening — additive, narrow breakpoints only (RH-v1) ===== */
+/* ===== responsive layout fixes (RH-v2) =====
+   Root cause of mobile horizontal overflow: grid/flex items default to
+   min-width:auto and refuse to shrink below their content's intrinsic width,
+   so wide tables/charts inflate the column past the viewport (and the inner
+   overflow-x:auto wrappers can never take effect). Letting these items shrink
+   to 0 lets the scroll containers actually contain their wide content. */
+.article-grid{min-width:0}
+.article-grid > .toc,
+.article-grid > article{min-width:0;max-width:100%}
+article{min-width:0}
+.chart-fig,.chart-area,.h-bar-row,.h-bar-track,.bucket-row,.bucket-bar-track,
+.week-banner,.chart-legend,.dc-header,.stat-card{min-width:0}
+
+/* Wide tabular data scrolls within its own box — never widens the page */
+.pivot-table-wrapper,.table-wrapper{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* Media and long unbroken strings can never exceed their container */
 img,svg,canvas,video{max-width:100%;height:auto}
-.body-text,.lead-text,.article-title,.sec-h2,.chart-title{overflow-wrap:break-word}
+.body-text,.lead-text,.article-title,.sec-h2,.chart-title,.chart-sub,
+.dc-name,.dc-investors,.week-banner-val,.stat-card-sub,.inv-name{overflow-wrap:anywhere}
+
 @media (max-width:480px){
   .chart-fig{padding:1.4rem 1.1rem}
   .stat-cards{grid-template-columns:1fr 1fr}
-  .chart-legend{gap:1.1rem;flex-wrap:wrap}
+  .chart-legend{gap:1rem;flex-wrap:wrap}
   .legend-item{font-size:9px}
-  .h-bar-label{flex:0 0 84px;font-size:9px}
-  .h-bar-val{flex:0 0 50px}
-  .h-bar-count{flex:0 0 38px}
-  .bucket-label{flex:0 0 72px;font-size:9px}
-  .bucket-stats{flex:0 0 58px}
+  .h-bar-label{flex:0 0 76px;font-size:9px}
+  .h-bar-val{flex:0 0 46px;font-size:9px}
+  .h-bar-count{flex:0 0 34px}
+  .bucket-label{flex:0 0 64px;font-size:9px}
+  .bucket-stats{flex:0 0 52px;font-size:8px}
 }
 @media (max-width:420px){
   .site-nav .nav-links{gap:.1rem}
@@ -219,12 +237,16 @@ img,svg,canvas,video{max-width:100%;height:auto}
   .rep-pager .pg{padding:.85rem .9rem}
 }
 @media (max-width:360px){
-  .article-title{font-size:1.45rem}
-  .stat-card-value{font-size:1.35rem}
-  .chart-fig{padding:1.2rem .85rem}
-  .week-banner{padding:1.1rem 1.1rem}
+  .article-title{font-size:1.4rem}
+  .stat-card-value{font-size:1.3rem}
+  .chart-fig{padding:1.2rem .8rem}
+  .week-banner{padding:1.1rem 1rem}
+  .h-bar-label{flex:0 0 68px}
+  .bucket-label{flex:0 0 56px}
+  .bucket-stats{flex:0 0 46px}
 }
 </style>
+
 </head>
 <body>
 <nav class="site-nav"><div class="site-nav-inner">
